@@ -7,6 +7,13 @@ class Genre(models.Model):
 
     def _str_(self):
         return self.name
+class Review(models.Model):
+    reviewer = models.CharField(max_length=100)
+    date_reviewed = models.DateField(blank = True)
+    review_text = models.CharField(max_length=1500)
+
+    def _str_(self):
+        return self.reviewer
 
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
@@ -18,6 +25,12 @@ class Book(models.Model):
     isbn = models.CharField('ISBN', max_length=13, help_text='13 Character ISBN number')
 
     genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
+
+    publisher = models.CharField(max_length=200)
+
+    year_of_pub = models.CharField(max_length=4)
+
+    # reviews = models.ManyToManyField(Review, max_length=1000)
 
     def _str_(self):
         return self.title
@@ -32,8 +45,6 @@ class BookInstance(models.Model):
     due_back = models.DateField(null=True, blank=True)
 
     LOAN_STATUS = (
-        ('m', 'Maintenance'),
-        ('o', 'On loan'),
         ('a', 'Available'),
         ('r', 'Reserved'),
     )
@@ -51,7 +62,7 @@ class BookInstance(models.Model):
     def _str_(self):
         """String for representing the Model object."""
         return f'{self.id} ({self.book.title})'
-    
+
 
 class Author(models.Model):
     """Model representing an author. """
@@ -69,4 +80,3 @@ class Author(models.Model):
 class Language(models.Model):
     country = models.CharField(max_length=100)
     language = models.CharField(max_length=100)
-    

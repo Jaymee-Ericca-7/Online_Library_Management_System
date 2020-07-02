@@ -1,3 +1,47 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+books = [
+    {
+        'title': 'The Lost Stars',
+        'author': 'Jaymes Eric',
+        'publisher': 'villacruz inc',
+        'year_of_pub': '2019',
+        'ISBN': 'BN154',
+        'status': 'available',
+        'reviews' : 'very awesome book'
+    },
+    {
+        'title': 'The Found Stars',
+        'author': 'Jaymes Eric',
+        'publisher': 'villacruz inc',
+        'year_of_pub': '2010',
+        'ISBN': 'BN143',
+        'status': 'available',
+        'reviews' : 'very awesome book'
+    },
+    {
+        'title': 'The Missing Stars',
+        'author': 'Jaymes Eric',
+        'publisher': 'villacruz inc',
+        'year_of_pub': '2001',
+        'ISBN': 'BN133',
+        'status': 'available',
+        'reviews' : 'very awesome book'
+    }
+]
+
+def home(request):
+    context = {
+        'books': books
+    }
+    return render(request, 'library_system/home.html', context)
+
+def login(request):
+    return render(request, 'library_system/login.html')
+
+def register(request):
+    return render(request, 'library_system/register.html')
+
+def profile(request):
+    return render(request, 'library_system/home.html')
