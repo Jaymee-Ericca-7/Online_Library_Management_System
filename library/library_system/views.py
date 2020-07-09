@@ -37,11 +37,8 @@ def home(request):
     }
     return render(request, 'library_system/home.html', context)
 
-def login(request):
-    return render(request, 'library_system/login.html')
-
-def register(request):
-    return render(request, 'library_system/register.html')
+def about(request):
+    return render(request, 'library_system/about.html')
 
 def profile(request):
     return render(request, 'library_system/home.html')
