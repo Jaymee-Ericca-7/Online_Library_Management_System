@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from library_system.models import Book, Author, Genre
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+u_name = "jaymee_ericca"
 
 def home(request):
     books = Book.objects.all()
@@ -24,7 +25,7 @@ class BookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         #get the post we're updating
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -35,7 +36,7 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -45,7 +46,7 @@ class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -55,7 +56,7 @@ class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         #get the post we're updating
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -76,7 +77,7 @@ class AuthorUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -86,7 +87,7 @@ class AuthorDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -97,7 +98,7 @@ class GenreCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         #get the post we're updating
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -107,6 +108,7 @@ class GenreListView(ListView):
     template_name = 'library_system/home.html'
     context_object_name = 'genres'
     ordering = ['-date_created']
+
 
 class GenreDetailView(DetailView):
     model = Genre
@@ -118,7 +120,7 @@ class GenreUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False
 
@@ -128,6 +130,6 @@ class GenreDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == "jaymee_ericca":
+        if self.request.user.username == u_name:
             return True
         return False

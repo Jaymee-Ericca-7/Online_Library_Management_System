@@ -25,8 +25,6 @@ class Book(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
 
-    # reviews = models.ManyToManyField(Review, max_length=1000)
-
     def _str_(self):
         return self.title
 
@@ -68,8 +66,8 @@ class Author(models.Model):
     """Model representing an author. """
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField(null = True, blank=True)
-    date_of_death = models.DateField('Died', null=True, blank=True)
+    date_of_birth = models.DateField(null = True, blank=True,  help_text='Format: yyyy-mm-dd')
+    date_of_death = models.DateField(null=True, blank=True, help_text='Format: yyyy-mm-dd')
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
 
