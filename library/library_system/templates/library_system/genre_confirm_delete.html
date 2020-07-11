@@ -1,0 +1,18 @@
+{% extends "users/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="content-section containter">
+    <form method="POST" class="form-group">
+      {% csrf_token %}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Remove Genre</legend>
+          <h2>Are you sure you want to remove {{ object.name }}  </h2>
+      </fieldset>
+      <div class="form-group">
+        <button type="submit" class="btn btn-outline-danger">Remove Genre</button>
+        <a class="btn btn-outline-secondary" href="{% url 'genre-detail' object.id %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+{%endblock content %}

@@ -1,0 +1,26 @@
+
+
+  <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
+  {% extends "library_system/base.html" %}
+  {% block content %}
+      <main role="main" class="container">
+        <div class="jumbotron">
+          <h1>{{ object.title }}</h1>
+          <p class="lead">By {{ object.author.first_name }} {{ object.author.last_name}}</p>
+          <p>Published by {{ object.publisher }} on year {{ object.year_of_pub}}</p>
+          <p>ISBN: {{object.isbn}}</p>
+          <!-- <p>Status: {{object.status}}</p> -->
+          <p>Reviews: {{object.reviews}}</p>
+          {% if  request.user.is_superuser %}
+          <p>
+            <a href="{% url 'book-delete' object.id %}" class="btn btn-primary">Delete</a>
+            <a href="{% url 'book-update' object.id %}" class="btn btn-primary">Edit</a>
+            <a href="#" class="btn btn-primary">Book Instance</a>
+          </p>
+          {% endif %}
+        </div>
+        <a class="btn btn-outline-secondary" href="{% url 'libsys-home' %}">Back To Books List</a>
+
+      </main>
+
+  {% endblock content %}

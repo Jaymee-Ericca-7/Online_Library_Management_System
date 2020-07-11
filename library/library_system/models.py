@@ -1,39 +1,37 @@
 from django.db import models
-
+from django.urls import reverse
 # Create your models here.
 
 class Genre(models.Model):
     name = models.CharField(max_length=200, help_text='Enter a book genre (e.g Science Fiction)')
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
 
     def _str_(self):
         return self.name
-class Review(models.Model):
-    reviewer = models.CharField(max_length=100)
-    date_reviewed = models.DateField(blank = True)
-    review_text = models.CharField(max_length=1500)
 
-    def _str_(self):
-        return self.reviewer
+    def get_absolute_url(self):
+        return reverse('genre-detail', kwargs={'pk': self.pk})
 
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
 class Book(models.Model):
     title = models.CharField(max_length=200)
-
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
-
     isbn = models.CharField('ISBN', max_length=13, help_text='13 Character ISBN number')
-
     genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
-
     publisher = models.CharField(max_length=200)
-
     year_of_pub = models.CharField(max_length=4)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
 
     # reviews = models.ManyToManyField(Review, max_length=1000)
 
     def _str_(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('book-detail', kwargs={'pk': self.pk})
 
 import uuid
 
@@ -43,6 +41,8 @@ class BookInstance(models.Model):
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
 
     LOAN_STATUS = (
         ('a', 'Available'),
@@ -70,12 +70,18 @@ class Author(models.Model):
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null = True, blank=True)
     date_of_death = models.DateField('Died', null=True, blank=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
+
     class Meta:
         ordering = ['last_name', 'first_name']
 
     def _str_(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
+    def get_absolute_url(self):
+        return reverse('author-detail', kwargs={'pk': self.pk})
 
 class Language(models.Model):
     country = models.CharField(max_length=100)

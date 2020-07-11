@@ -2,7 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_protect
+from library_system.models import Book
+from library_system.models import BookInstance
 
+@csrf_protect
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -17,4 +21,6 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'users/profile.html')
+    books = Book.objects.all()
+    args = {'books': books}
+    return render(request, 'users/profile.html', args)
