@@ -1,10 +1,13 @@
 # Online_Library_Management_System
 
 Features added:
-- Create, Update, and Delete Books, Authors, and Genres. 
+- Views and working functions for Creating, Updating, and Deleting of Books, Authors, and Genres. 
+
+Currently working on: 
+- Create, update, delete of Book Instance
+- specific user assigned as manager, student/teacher, and admin (working on it now - jaymee) 
 
 Features to be added: 
 - borrowing-returning system 
-- specific user assigned as manager, student/teacher, and admin (working on it now - jaymee) 
 - security features indicated in specs
-- search book function (working on it now - jaymee)
+- search book function (will work on this - jaymee)
