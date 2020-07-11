@@ -13,6 +13,13 @@ Features to be added:
 - search book function (will work on this - jaymee)
 
 
+Take Note: 
+(temporary fix)
+since I am still working on the specific user assignment part (if student/teacher or if manager or if admin), for now, please do the following:
+- create a superuser at command prompt. CMD to where manage.py is located, then type "python manage.py createsuperuser". then enter the details being asked. 
+- After creating the superuser, please change this file library_system/views.py at line "u_name = jaymee_ericca" to the username you entered for your superuser (sample: u_name = enoch_puno")
+- This is so that you can see the features of the manager when you log in.
+
 Reference: 
 https://github.com/CoreyMSchafer/code_snippets/tree/master/Django_Blog
 https://www.youtube.com/watch?v=-s7e_Fy6NRU
