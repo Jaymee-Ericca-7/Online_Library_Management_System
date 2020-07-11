@@ -1,9 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from library_system.models import Book, Author, Genre
+from library_system.models import Book, Author, Genre, BookInstance
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.db.models import Q
+
 u_name = "jaymee_ericca"
+
+class SearchListView(ListView):
+    model = Book
+    template_name = 'library_system/home.html'
+    context_object_name = 'books'
+    ordering = ['-date_created']
+    paginate_by = 3
+
+    def get_queryset(self):
+      result = super(SearchListView, self).get_queryset()
+      query = self.request.GET.get('search')
+      if query:
+          postresult = Book.objects.filter(title__contains=query)
+          result = postresult
+      else:
+          result = None
+      return result
+
 
 def home(request):
     books = Book.objects.all()
@@ -15,6 +35,8 @@ class BookListView(ListView):
     template_name = 'library_system/home.html'
     context_object_name = 'books'
     ordering = ['-date_created']
+    paginate_by = 3
+
 
 class BookDetailView(DetailView):
     model = Book
@@ -66,6 +88,7 @@ class AuthorListView(ListView):
     template_name = 'library_system/home.html'
     context_object_name = 'authors'
     ordering = ['-date_created']
+    paginate_by = 3
 
 class AuthorDetailView(DetailView):
     model = Author
@@ -103,11 +126,12 @@ class GenreCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return False
 
 class GenreListView(ListView):
-    authors = Genre.objects.all()
+    genres = Genre.objects.all()
     model = Genre
     template_name = 'library_system/home.html'
     context_object_name = 'genres'
     ordering = ['-date_created']
+    paginate_by = 3
 
 
 class GenreDetailView(DetailView):
@@ -127,6 +151,50 @@ class GenreUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class GenreDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Genre
     success_url = '/library_system/genres'
+    def test_func(self):
+        #get the post we're updating
+        book = self.get_object()
+        if self.request.user.username == u_name:
+            return True
+        return False
+
+
+class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = BookInstance
+    fields = ['id', 'book', 'imprint', 'due_back', 'status']
+
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.username == u_name:
+            return True
+        return False
+
+class BookInstanceListView(ListView):
+    bookinstances = BookInstance.objects.all()
+    model = BookInstance
+    template_name = 'library_system/home.html'
+    context_object_name = 'bookinstances'
+    ordering = ['-date_created']
+    paginate_by = 3
+
+
+class BookInstanceDetailView(DetailView):
+    model = BookInstance
+
+class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = BookInstance
+    fields = ['imprint', 'due_back', 'status']
+
+    def test_func(self):
+        #get the post we're updating
+        book = self.get_object()
+        if self.request.user.username == u_name:
+            return True
+        return False
+
+class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = BookInstance
+    success_url = '/bookinstance'
     def test_func(self):
         #get the post we're updating
         book = self.get_object()

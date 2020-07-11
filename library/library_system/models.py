@@ -61,6 +61,9 @@ class BookInstance(models.Model):
         """String for representing the Model object."""
         return f'{self.id} ({self.book.title})'
 
+    def get_absolute_url(self):
+        return reverse('bookinstance-detail', kwargs={'pk': self.id})
+
 
 class Author(models.Model):
     """Model representing an author. """

@@ -15,7 +15,7 @@
           <p>
             <a href="{% url 'book-delete' object.id %}" class="btn btn-primary">Delete</a>
             <a href="{% url 'book-update' object.id %}" class="btn btn-primary">Edit</a>
-            <a href="#" class="btn btn-primary">Book Instance</a>
+            <a href="{% url 'bookinstance-list' %}" class="btn btn-primary">Book Instance</a>
           </p>
           {% endif %}
         </div>

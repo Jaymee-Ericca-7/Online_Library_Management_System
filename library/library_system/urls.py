@@ -1,15 +1,18 @@
 from django.urls import path
 from . import views
-from .views import (
+from .views import ( SearchListView,
     BookListView, BookDetailView,
     BookCreateView, BookUpdateView, BookDeleteView,
     AuthorListView, AuthorDetailView,
     AuthorCreateView, AuthorUpdateView, AuthorDeleteView,
     GenreListView, GenreDetailView,
-    GenreCreateView, GenreUpdateView, GenreDeleteView )
+    GenreCreateView, GenreUpdateView, GenreDeleteView,
+    BookInstanceDetailView, BookInstanceListView,
+    BookInstanceCreateView,BookInstanceUpdateView, BookInstanceDeleteView)
 
 urlpatterns = [
     path('', BookListView.as_view(), name="libsys-home"),
+    path('search/', SearchListView.as_view(), name="libsys-search"),
     path('book/<int:pk>/', BookDetailView.as_view(), name="book-detail"),
     path('book/new/', BookCreateView.as_view(), name="book-create"),
     path('book/<int:pk>/update/', BookUpdateView.as_view(), name="book-update"),
@@ -25,5 +28,11 @@ urlpatterns = [
     path('genre/<int:pk>/', GenreDetailView.as_view(), name="genre-detail"),
     path('genre/<int:pk>/update/', GenreUpdateView.as_view(), name="genre-update"),
     path('genre/<int:pk>/delete/', GenreDeleteView.as_view(), name="genre-delete"),
-    path('genres/',GenreListView.as_view(), name="genre-list" )
+    path('genres/',GenreListView.as_view(), name="genre-list" ),
+
+    path('bookinstance/new/', BookInstanceCreateView.as_view(), name="bookinstance-create"),
+    path('bookinstance/<pk>/', BookInstanceDetailView.as_view(), name="bookinstance-detail"),
+    path('bookinstance/<pk>/update/', BookInstanceUpdateView.as_view(), name="bookinstance-update"),
+    path('bookinstance/<pk>/delete/', BookInstanceDeleteView.as_view(), name="bookinstance-delete"),
+    path('bookinstance/',BookInstanceListView.as_view(), name="bookinstance-list" )
 ]
