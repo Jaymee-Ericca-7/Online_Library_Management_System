@@ -11,3 +11,8 @@ Features to be added:
 - borrowing-returning system 
 - security features indicated in specs
 - search book function (will work on this - jaymee)
+
+
+Reference: 
+https://github.com/CoreyMSchafer/code_snippets/tree/master/Django_Blog
+https://www.youtube.com/watch?v=-s7e_Fy6NRU
