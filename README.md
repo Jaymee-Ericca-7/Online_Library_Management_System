@@ -6,11 +6,11 @@ Features added:
 
 Currently working on:
 - logic for book instance - jaymee
-- specific user assigned as manager, student/teacher, and admin (working on it now - jaymee)
+- admin assigns a user as manager - Denise
 
 Features to be added:
-- borrowing-returning system
-- security features indicated in specs
+- borrowing-returning system - Denise
+- security features indicated in specs - Enoch & Jan
 
 
 Take Note:
