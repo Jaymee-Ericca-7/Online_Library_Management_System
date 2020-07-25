@@ -9,7 +9,7 @@ Currently working on:
 - admin assigns a user as manager - Denise
 
 Features to be added:
-- borrowing-returning system - Denise
+- borrowing-returning system - Denise (but wait till I (jaymee) finish the book instance part for this part :>)
 - security features indicated in specs - Enoch & Jan
 
 
