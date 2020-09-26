@@ -9,13 +9,14 @@
           <p class="lead">By {{ object.author.first_name }} {{ object.author.last_name}}</p>
           <p>Published by {{ object.publisher }} on year {{ object.year_of_pub}}</p>
           <p>ISBN: {{object.isbn}}</p>
+          <p>Genre: {% for tag in object.genre.all %} {{tag.name}}, {% endfor %}</p>
           <!-- <p>Status: {{object.status}}</p> -->
           <p>Reviews: {{object.reviews}}</p>
           {% if  request.user.is_superuser %}
           <p>
             <a href="{% url 'book-delete' object.id %}" class="btn btn-primary">Delete</a>
             <a href="{% url 'book-update' object.id %}" class="btn btn-primary">Edit</a>
-            <a href="{% url 'bookinstance-list' %}" class="btn btn-primary">Book Instance</a>
+            <a href="{% url 'bookinstance-list' object.title %}" class="btn btn-primary">Book Instance</a>
           </p>
           {% endif %}
         </div>

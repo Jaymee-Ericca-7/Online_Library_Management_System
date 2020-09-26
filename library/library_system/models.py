@@ -7,11 +7,21 @@ class Genre(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('genre-detail', kwargs={'pk': self.pk})
+
+# class Reviews(models.Model):
+#     review_text = models.CharField(max_length=1000)
+#     # reviewer = models.ForeignKey('User', on_delete=models.SET_NULL, null = True)
+#     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
+#     date_created = models.DateTimeField(auto_now_add=True)
+#     date_update = models.DateTimeField(auto_now=True)
+#
+#     def _str_(self):
+#         return self.name
 
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
@@ -19,13 +29,13 @@ class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
     isbn = models.CharField('ISBN', max_length=13, help_text='13 Character ISBN number')
-    genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
+    genre = models.ManyToManyField('Genre', help_text='Select a genre for this book')
     publisher = models.CharField(max_length=200)
     year_of_pub = models.CharField(max_length=4)
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
 
-    def _str_(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):
@@ -57,7 +67,7 @@ class BookInstance(models.Model):
     class Meta:
         ordering = ['due_back']
 
-    def _str_(self):
+    def __str__(self):
         """String for representing the Model object."""
         return f'{self.id} ({self.book.title})'
 
@@ -77,7 +87,7 @@ class Author(models.Model):
     class Meta:
         ordering = ['last_name', 'first_name']
 
-    def _str_(self):
+    def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
 
