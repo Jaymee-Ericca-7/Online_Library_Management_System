@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from account.forms import RegistrationForm, AccountAuthenticationForm
+from django.dispatch import receiver
+from django.contrib.auth.signals import user_logged_in
+
 
 def registration_view(request):
     if request.method == 'POST':
@@ -19,7 +22,6 @@ def registration_view(request):
 def login_view(request):
     user = request.user
     if user.is_authenticated:
-        print("user already authenticated")
         return redirect('libsys-home')
 
     if request.POST:
@@ -41,4 +43,16 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, 'account/logout.html')
-# Create your views here.
+
+@receiver(user_logged_in)
+def sig_user_logged_in(sender, user, request, **kwargs):
+    request.session['isLoggedIn'] = True
+    request.session['isAdmin'] = user.is_superuser
+    request.session['role'] = user.role
+    request.session['username'] = user.username
+    isLoggedIn = request.session.get('isLoggedIn',False)
+    isAdmin = request.session.get('isAdmin',False)
+    print(request.session['isLoggedIn'])
+    print(request.session['username'])
+    print(request.session['role'])
+    request.session.set_expiry(10)

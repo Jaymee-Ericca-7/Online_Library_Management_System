@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from library_system.models import Book, Author, Genre, BookInstance
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -37,7 +37,6 @@ class BookListView(ListView):
     ordering = ['-date_created']
     paginate_by = 3
 
-
 class BookDetailView(DetailView):
     model = Book
 
@@ -45,42 +44,42 @@ class BookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Book
     fields = ['title', 'author', 'isbn','genre', 'publisher', 'year_of_pub']
 
-    # def test_func(self):
-    #     #get the post we're updating
-    #     if self.request.user.role == "Book Manager":
-    #         return True
-    #     return False
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Book
     fields = ['title', 'author', 'isbn','genre', 'publisher', 'year_of_pub']
 
-    # def test_func(self):
-    #     #get the post we're updating
-    #     book = self.get_object()
-    #     if self.request.user.is_superuser:
-    #         return True
-    #     return False
+    def test_func(self):
+        #get the post we're updating
+        book = self.get_object()
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Book
     success_url = '/library_system'
-    # def test_func(self):
-    #     #get the post we're updating
-    #     book = self.get_object()
-    #     if self.request.user.is_superuser:
-    #         return True
-    #     return False
+    def test_func(self):
+        #get the post we're updating
+        book = self.get_object()
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
 
-    # def test_func(self):
-    #     #get the post we're updating
-    #     if self.request.user.is_superuser:
-    #         return True
-    #     return False
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class AuthorListView(ListView):
     authors = Author.objects.all()
@@ -89,6 +88,12 @@ class AuthorListView(ListView):
     context_object_name = 'authors'
     ordering = ['-date_created']
     paginate_by = 3
+
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class AuthorDetailView(DetailView):
     model = Author
@@ -99,8 +104,7 @@ class AuthorUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         #get the post we're updating
-        book = self.get_object()
-        if self.request.user.is_superuser:
+        if self.request.user.role=="manager":
             return True
         return False
 
@@ -109,8 +113,7 @@ class AuthorDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = '/library_system/authors'
     def test_func(self):
         #get the post we're updating
-        book = self.get_object()
-        if self.request.user.is_superuser:
+        if self.request.user.role=="manager":
             return True
         return False
 
@@ -121,7 +124,7 @@ class GenreCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         #get the post we're updating
-        if self.request.user.is_superuser:
+        if self.request.user.role=="manager":
             return True
         return False
 
@@ -144,7 +147,7 @@ class GenreUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.is_superuser:
+        if self.request.user.role=="manager":
             return True
         return False
 
@@ -154,7 +157,7 @@ class GenreDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.is_superuser:
+        if self.request.user.role=="manager":
             return True
         return False
 
@@ -165,7 +168,7 @@ class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView
 
     def test_func(self):
         #get the post we're updating
-        if self.request.user.is_superuser:
+        if self.request.user.role=="manager":
             return True
         return False
 
@@ -188,7 +191,7 @@ class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.role == "Book Manager":
+        if self.request.user.role=="manager":
             return True
         return False
 
@@ -198,6 +201,6 @@ class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.is_superuser:
+        if self.request.user.role=="manager":
             return True
         return False
