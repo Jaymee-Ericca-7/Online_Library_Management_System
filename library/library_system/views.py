@@ -3,9 +3,8 @@ from django.http import HttpResponse
 from library_system.models import Book, Author, Genre, BookInstance
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
-u_name = "jaymee_ericca"
 
 class SearchListView(ListView):
     model = Book
@@ -26,6 +25,7 @@ class SearchListView(ListView):
 
 
 def home(request):
+
     books = Book.objects.all()
     args = {'books': books}
     return render(request, 'library_system/home.html', args)
@@ -45,42 +45,42 @@ class BookCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Book
     fields = ['title', 'author', 'isbn','genre', 'publisher', 'year_of_pub']
 
-    def test_func(self):
-        #get the post we're updating
-        if self.request.user.username == u_name:
-            return True
-        return False
+    # def test_func(self):
+    #     #get the post we're updating
+    #     if self.request.user.role == "Book Manager":
+    #         return True
+    #     return False
 
 class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Book
     fields = ['title', 'author', 'isbn','genre', 'publisher', 'year_of_pub']
 
-    def test_func(self):
-        #get the post we're updating
-        book = self.get_object()
-        if self.request.user.username == u_name:
-            return True
-        return False
+    # def test_func(self):
+    #     #get the post we're updating
+    #     book = self.get_object()
+    #     if self.request.user.is_superuser:
+    #         return True
+    #     return False
 
 class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Book
     success_url = '/library_system'
-    def test_func(self):
-        #get the post we're updating
-        book = self.get_object()
-        if self.request.user.username == u_name:
-            return True
-        return False
+    # def test_func(self):
+    #     #get the post we're updating
+    #     book = self.get_object()
+    #     if self.request.user.is_superuser:
+    #         return True
+    #     return False
 
 class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
 
-    def test_func(self):
-        #get the post we're updating
-        if self.request.user.username == u_name:
-            return True
-        return False
+    # def test_func(self):
+    #     #get the post we're updating
+    #     if self.request.user.is_superuser:
+    #         return True
+    #     return False
 
 class AuthorListView(ListView):
     authors = Author.objects.all()
@@ -100,7 +100,7 @@ class AuthorUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == u_name:
+        if self.request.user.is_superuser:
             return True
         return False
 
@@ -110,7 +110,7 @@ class AuthorDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == u_name:
+        if self.request.user.is_superuser:
             return True
         return False
 
@@ -121,7 +121,7 @@ class GenreCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
 
     def test_func(self):
         #get the post we're updating
-        if self.request.user.username == u_name:
+        if self.request.user.is_superuser:
             return True
         return False
 
@@ -144,7 +144,7 @@ class GenreUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == u_name:
+        if self.request.user.is_superuser:
             return True
         return False
 
@@ -154,7 +154,7 @@ class GenreDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == u_name:
+        if self.request.user.is_superuser:
             return True
         return False
 
@@ -165,7 +165,7 @@ class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView
 
     def test_func(self):
         #get the post we're updating
-        if self.request.user.username == u_name:
+        if self.request.user.is_superuser:
             return True
         return False
 
@@ -188,7 +188,7 @@ class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == u_name:
+        if self.request.user.role == "Book Manager":
             return True
         return False
 
@@ -198,6 +198,6 @@ class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
-        if self.request.user.username == u_name:
+        if self.request.user.is_superuser:
             return True
         return False

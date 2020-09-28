@@ -13,15 +13,14 @@ class Genre(models.Model):
     def get_absolute_url(self):
         return reverse('genre-detail', kwargs={'pk': self.pk})
 
-# class Reviews(models.Model):
-#     review_text = models.CharField(max_length=1000)
-#     # reviewer = models.ForeignKey('User', on_delete=models.SET_NULL, null = True)
-#     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
-#     date_created = models.DateTimeField(auto_now_add=True)
-#     date_update = models.DateTimeField(auto_now=True)
-#
-#     def _str_(self):
-#         return self.name
+class Reviews(models.Model):
+    review_text = models.CharField(max_length=1000)
+    # reviewer = models.ForeignKey('User', on_delete=models.SET_NULL, null = True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_update = models.DateTimeField(auto_now=True)
+
+    def _str_(self):
+        return self.review_text
 
 from django.urls import reverse # Used to generate URLs by reversing the URL patterns
 
@@ -34,7 +33,7 @@ class Book(models.Model):
     year_of_pub = models.CharField(max_length=4)
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
-
+    review = models.ForeignKey('Reviews',  on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return self.title
 
