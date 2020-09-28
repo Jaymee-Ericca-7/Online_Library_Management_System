@@ -164,17 +164,10 @@ class GenreDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 # ----------------------------------------------------------------------------------------
 
-class ReviewCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class ReviewCreateView(CreateView):
     model = Review
-    fields = ['book', 'review_text']
+    fields = ['book', 'review_text', 'review_writer']
     success_url = '/library_system/reviews'
-
-    def test_func(self):
-        #get the post we're updating
-        if self.request.user.role=="regular":
-            return True
-        return False
-
 
 def FilteredReview(request):
     template = 'library_system/home.html'
@@ -186,33 +179,11 @@ def FilteredReview(request):
         print(reviews)
     else:
         reviews = Review.objects.all()
-
     context = {
         "object_list": reviews
     }
-
     return render(request, template, context)
-# class FilteredReviewListView(ListView):
-#     model = Review
-#     template_name = 'library_system/reviews_list.html'
-#     context_object_name = 'reviews'
-#     ordering = ['-date_created']
-#     paginate_by = 3
-#
-#     def get_queryset(self):
-#         if self.request.method == "GET" and self.request.GET:
-#               result = super(FilteredReviewListView, self).get_queryset()
-#               print("result: " + str(result))
-#               query = self.request.GET.get('review')
-#               if query:
-#                   postresult = Review.objects.filter(book_id=query)
-#                   print(postresult.all)
-#                   result = postresult
-#               else:
-#                   result = None
-#               return result
-#         else:
-#             return []
+
 
 class ReviewListView(ListView):
     reviews = Review.objects.all()

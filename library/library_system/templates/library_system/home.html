@@ -45,7 +45,9 @@
     <main role="main" class="container">
       <div class="jumbotron">
         <h2>Book Title: {{ review.book.title }}</h2>
-        <h3>Review: {{review.review_text }}</h3>
+        <h2>Review Writer: {{review.account.username}}</h2>
+        <h2>Review: {{review.review_text }}</h2>
+
       </div>
     </main>
   {% endfor %}

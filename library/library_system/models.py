@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from account.models import Account
 # Create your models here.
 
 class Genre(models.Model):
@@ -18,6 +19,7 @@ class Review(models.Model):
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_update = models.DateTimeField(auto_now=True)
+    review_writer = models.ForeignKey(Account,on_delete=models.SET_NULL, null=True, blank=True, default="Anonymouos")
 
     def _str_(self):
         return self.review_text
