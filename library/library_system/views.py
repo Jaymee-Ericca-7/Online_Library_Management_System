@@ -201,3 +201,4 @@ class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
         if self.request.user.username == u_name:
             return True
         return False
+#sample push
