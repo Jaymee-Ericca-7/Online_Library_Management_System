@@ -1,24 +1,21 @@
 # Online_Library_Management_System
 
-Features added:
-- Views and working functions for Creating, Updating, and Deleting of Books, Book Instance, Authors, and Genres.
-- search book function
+INSTALL:
+FOR BRUTE FORCE LOG IN ATTEMPT
+pip install django-brutebuster2
 
-Currently working on:
-1. logic for book instance - jaymee
+1. Add BruteBuster to your INSTALLED_APPS list in settings.py
+2. Add BruteBuster.middleware.RequestMiddleware to your MIDDLEWARE_CLASSES in settings.py
+3. Run python manage.py migrate --run-syncdb to add the BruteBuster table to your database
+4. That's it! Don't forget to restart your server, if needed.
 
-Features to be added:
-1. admin assigns a user as manager - Denise
-2. borrowing-returning system - Denise (but wait till I (jaymee) finish the book instance part for this part :>)
-3. security features indicated in specs - Enoch & Jan
+If everything is working properly, you should see a Failed attempts table in the Django admin interface. Whenever a failed login is detected, the Failures counter for the respective Username/IP address combo is incremented. If the counter goes over a certain threshold (called BB_MAX_FAILURES), login attempts for this User and IP are blocked until BB_BLOCK_INTERVAL (minutes) passes without a failed login.
 
 
-Take Note:
-(temporary fix for #1 on "Features to be added" ^ )
-So you guys can access the manager features for now, please do the following:
-- create a superuser at command prompt. CMD to where manage.py is located, then type "python manage.py createsuperuser". then enter the details being asked.
-- After creating the superuser, please change this file library_system/views.py at line "u_name = jaymee_ericca" to the username you entered for your superuser (sample: u_name = enoch_puno")
-- This is so that you can see the features of the manager when you log in.
+
+FOR CRYPTOGRAPHY(Meantime)
+pip install django-cryptography
+
 
 Reference:
 https://github.com/CoreyMSchafer/code_snippets/tree/master/Django_Blog
