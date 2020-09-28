@@ -1,23 +1,22 @@
 {% extends "library_system/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-  <div class="content-section containter">
-    <form method="POST" class="form-group">
-      {% csrf_token %}
-      <fieldset class="form-group">
-          <legend class="border-bottom mb-4">Add New Genre</legend>
-          {{ form|crispy }}
-      </fieldset>
-      <div class="form-group">
-        <button type="submit" class="btn btn-outline-info">Submit Genre</button>
-        {% if object.id != null %}
-        <a class="btn btn-outline-secondary" href="{% url 'genre-detail' object.id %}">Cancel</a>
-        {% else %}
-        <a class="btn btn-outline-secondary" href="{% url 'genre-list' %}">Cancel</a>
-        {% endif %}
+    <div class="content-section containter">
+      <form method="POST" class="form-group">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Add New Genre</legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+          <button type="submit" class="btn btn-outline-info">Submit Genre</button>
+          {% if object.id != null %}
+          <a class="btn btn-outline-secondary" href="{% url 'genre-detail' object.id %}">Cancel</a>
+          {% else %}
+          <a class="btn btn-outline-secondary" href="{% url 'genre-list' %}">Cancel</a>
+          {% endif %}
 
-      </div>
-    </form>
-  </div>
-
+        </div>
+      </form>
+    </div>
 {%endblock content %}

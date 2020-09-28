@@ -3,9 +3,9 @@
   <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
   {% extends "library_system/base.html" %}
   {% block content %}
-  {% if request.user.is_superuser %}
+  {% if request.user.role == "manager" %}
     <div class="">
-      <h1>WELCOME {{ request.user.first_name }} {{request.user.last_name}}!</h1>
+      <h1>WELCOME Manager {{ request.user.first_name }} {{request.user.last_name}}!</h1>
     </div>
   {% else %}
 
@@ -37,6 +37,15 @@
       <div class="jumbotron">
         <h2>Genre Name: </h2>
         <h3><a href="{% url 'genre-detail' genre.id %}">{{ genre.name }}</a></h3>
+      </div>
+    </main>
+  {% endfor %}
+
+  {% for review in object_list  %}
+    <main role="main" class="container">
+      <div class="jumbotron">
+        <h2>Book Title: {{ review.book.title }}</h2>
+        <h3>Review: {{review.review_text }}</h3>
       </div>
     </main>
   {% endfor %}
@@ -86,7 +95,7 @@
 
 {% block body %}
 
-{% if request.user.is_superuser %}
+{% if request.user.role == "manager" %}
 
 <div class="content-section">
   <h3>Actions:</h3>

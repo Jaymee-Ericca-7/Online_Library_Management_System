@@ -1,0 +1,54 @@
+
+
+  <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
+  {% extends "library_system/base.html" %}
+  {% block content %}
+  {% if request.user.role == "manager" %}
+    <div class="">
+      <h1>WELCOME Manager {{ request.user.first_name }} {{request.user.last_name}}!</h1>
+    </div>
+  {% else %}
+
+    <div class="">
+      <h1>WELCOME {{ request.user.first_name }} {{request.user.last_name}}!</h1>
+      <h2>The Xavier’s School for Gifted Youngsters Library System allows teachers and students to borrow & return books and track your status! </h2>
+    </div>
+  {% endif %}
+
+  {% for review in reviews %}
+    <main role="main" class="container">
+      <div class="jumbotron">
+        <h2>Book Name: </h2>
+        <h3><a href="">{{ review.book.title }}</a></h3>
+        <h2>Book Review: </h2>
+        <h3><a href="">{{ review.review_text }}</a></h3>
+      </div>
+    </main>
+  {% endfor %}
+
+  {% if is_paginated %}
+
+    {% if page_obj.has_previous %}
+      <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+      <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif  %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+      <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'-3' %}
+      <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
+      <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif  %}
+
+  {% endif %}
+{% endblock content %}
+
+{% block body %}
+
+{% endblock %}

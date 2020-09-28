@@ -8,7 +8,9 @@ from .views import ( SearchListView,
     GenreListView, GenreDetailView,
     GenreCreateView, GenreUpdateView, GenreDeleteView,
     BookInstanceDetailView, BookInstanceListView,
-    BookInstanceCreateView,BookInstanceUpdateView, BookInstanceDeleteView)
+    BookInstanceCreateView,BookInstanceUpdateView, BookInstanceDeleteView,
+    ReviewDetailView, ReviewListView,FilteredReview,
+    ReviewCreateView, ReviewUpdateView, ReviewDeleteView)
 
 urlpatterns = [
     path('', BookListView.as_view(), name="libsys-home"),
@@ -29,6 +31,13 @@ urlpatterns = [
     path('genre/<int:pk>/update/', GenreUpdateView.as_view(), name="genre-update"),
     path('genre/<int:pk>/delete/', GenreDeleteView.as_view(), name="genre-delete"),
     path('genres/',GenreListView.as_view(), name="genre-list" ),
+
+    path('review/<int:pk>/', ReviewDetailView.as_view(), name="review-detail"),
+    path('f_reviews/', FilteredReview, name="filtered-review-list"),
+    path('reviews/', ReviewListView.as_view(), name="review-list"),
+    path('review/new/', ReviewCreateView.as_view(), name="review-create"),
+    path('review/<int:pk>/update/', ReviewUpdateView.as_view(), name="review-update"),
+    path('review/<int:pk>/delete/', ReviewDeleteView.as_view(), name="review-delete"),
 
     path('bookinstance/new/', BookInstanceCreateView.as_view(), name="bookinstance-create"),
     path('bookinstance/<pk>/', BookInstanceDetailView.as_view(), name="bookinstance-detail"),

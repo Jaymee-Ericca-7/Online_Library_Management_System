@@ -10,7 +10,7 @@
             <p>BOOK: {{ object.book.title }}</p>
             <p>Imprint: {{object.imprint}} </p>
             <p>Status: {{object.status}}</p>
-            {% if  request.user.is_superuser %}
+            {% if  request.user.role == "manager" %}
             <p>
               <a href="{% url 'bookinstance-delete' object.id %}" class="btn btn-primary">Delete</a>
               <a href="{% url 'bookinstance-update' object.id %}" class="btn btn-primary">Edit</a>

@@ -64,7 +64,7 @@ class Account(AbstractBaseUser):
     is_staff            = models.BooleanField(default=False)
     is_superuser        = models.BooleanField(default=False)
     role                = models.CharField(max_length=200, choices=ROLES, default='regular')
-
+    
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','first_name','last_name','id_num', 'role']
 

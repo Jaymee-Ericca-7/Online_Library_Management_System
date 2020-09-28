@@ -5,11 +5,11 @@
     <form method="POST" class="form-group">
       {% csrf_token %}
       <fieldset class="form-group">
-          <legend class="border-bottom mb-4">Add New Author</legend>
+          <legend class="border-bottom mb-4">Add  Review</legend>
           {{ form|crispy }}
       </fieldset>
       <div class="form-group">
-        <button type="submit" class="btn btn-outline-info">Submit Author</button>
+        <button type="submit" class="btn btn-outline-info">Publish Review</button>
         {% if object.id != null %}
         <a class="btn btn-outline-secondary" href="{% url 'author-detail' object.id %}">Cancel</a>
         {% else %}

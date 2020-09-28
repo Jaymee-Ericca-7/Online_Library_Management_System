@@ -3,7 +3,7 @@
   <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
   {% extends "library_system/base.html" %}
   {% block content %}
-  {% if request.user.is_superuser %}
+  {% if request.user.role=="manager" %}
     <div class="">
       <h1>You searched for: {{view.kwargs.title }}</h1>
     </div>

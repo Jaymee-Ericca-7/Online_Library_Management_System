@@ -11,13 +11,17 @@
           <p>ISBN: {{object.isbn}}</p>
           <p>Genre: {% for tag in object.genre.all %} {{tag.name}}, {% endfor %}</p>
           <!-- <p>Status: {{object.status}}</p> -->
-          <p>Reviews: {{object.reviews}}</p>
-          {% if  request.user.is_superuser %}
+          {% if  request.user.role == "manager" %}
           <p>
             <a href="{% url 'book-delete' object.id %}" class="btn btn-primary">Delete</a>
             <a href="{% url 'book-update' object.id %}" class="btn btn-primary">Edit</a>
             <a href="{% url 'bookinstance-list' object.title %}" class="btn btn-primary">Book Instance</a>
           </p>
+          {% else %}
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'filtered-review-list' %}">
+              <input name="q" value="{{ object.id }}" type="hidden" class="form-control mr-sm-2" >
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Checkout the Reviews!</button>
+            </form>
           {% endif %}
         </div>
         <a class="btn btn-outline-secondary" href="{% url 'libsys-home' %}">Back To Books List</a>

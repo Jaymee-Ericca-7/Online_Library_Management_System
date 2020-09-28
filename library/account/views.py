@@ -55,4 +55,4 @@ def sig_user_logged_in(sender, user, request, **kwargs):
     print(request.session['isLoggedIn'])
     print(request.session['username'])
     print(request.session['role'])
-    request.session.set_expiry(10)
+    request.session.set_expiry(60)

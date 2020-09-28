@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from library_system.models import Book, Author, Genre, BookInstance
+from library_system.models import Book, Author, Genre, BookInstance, Review
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Q
 
 class SearchListView(ListView):
     model = Book
@@ -162,6 +162,95 @@ class GenreDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
+# ----------------------------------------------------------------------------------------
+
+class ReviewCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Review
+    fields = ['book', 'review_text']
+    success_url = '/library_system/reviews'
+
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="regular":
+            return True
+        return False
+
+
+def FilteredReview(request):
+    template = 'library_system/home.html'
+    query = request.GET.get('q')
+    print(query)
+    if query:
+        print("query exists")
+        reviews = Review.objects.filter(book__id__iexact=query)
+        print(reviews)
+    else:
+        reviews = Review.objects.all()
+
+    context = {
+        "object_list": reviews
+    }
+
+    return render(request, template, context)
+# class FilteredReviewListView(ListView):
+#     model = Review
+#     template_name = 'library_system/reviews_list.html'
+#     context_object_name = 'reviews'
+#     ordering = ['-date_created']
+#     paginate_by = 3
+#
+#     def get_queryset(self):
+#         if self.request.method == "GET" and self.request.GET:
+#               result = super(FilteredReviewListView, self).get_queryset()
+#               print("result: " + str(result))
+#               query = self.request.GET.get('review')
+#               if query:
+#                   postresult = Review.objects.filter(book_id=query)
+#                   print(postresult.all)
+#                   result = postresult
+#               else:
+#                   result = None
+#               return result
+#         else:
+#             return []
+
+class ReviewListView(ListView):
+    reviews = Review.objects.all()
+    model = Review
+    template_name = 'library_system/home.html'
+    context_object_name = 'reviews'
+    ordering = ['-date_created']
+    paginate_by = 3
+
+
+class ReviewDetailView(DetailView):
+    model = Review
+
+class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Review
+    fields = ['review_text']
+
+    def test_func(self):
+        #get the post we're updating
+        review = self.get_object()
+        if self.request.user.role=="regular":
+            return True
+        return False
+
+class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Review
+    success_url = '/library_system/reviews'
+    def test_func(self):
+        #get the post we're updating
+        review = self.get_object()
+        if self.request.user.role=="regular":
+            return True
+        return False
+
+
+# ---------------------------------------------------------------------------------
+
+
 class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = BookInstance
     fields = ['id', 'book', 'imprint', 'due_back', 'status']
@@ -179,10 +268,19 @@ class BookInstanceListView(ListView):
     context_object_name = 'bookinstances'
     ordering = ['-date_created']
     paginate_by = 3
-
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class BookInstanceDetailView(DetailView):
     model = BookInstance
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BookInstance

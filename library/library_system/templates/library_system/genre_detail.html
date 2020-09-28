@@ -8,7 +8,7 @@
           <h1>Genre: {{ object.name }}</h1>
           <p>Date-Created: {{ object.date_created }}</p>
           <p>Date-Updated: {{ object.date_update }}</p>
-          {% if  request.user.is_superuser %}
+          {% if  request.user.role == "manager" %}
           <p>
             <a href="{% url 'genre-delete' object.id %}" class="btn btn-primary">Delete</a>
             <a href="{% url 'genre-update' object.id %}" class="btn btn-primary">Edit</a>
