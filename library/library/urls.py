@@ -20,13 +20,10 @@ from django.urls import path, include
 from account.views import(registration_view, logout_view, login_view)
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('account/', include('account.urls')),
-    # path('account/', include('django.contrib.auth.urls')),
     path('register/', registration_view, name='register'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('library_system/', include('library_system.urls')),
-    # path('profile/', user_views.profile, name='profile'),
 ]
 #
 # from django.views.generic import RedirectView

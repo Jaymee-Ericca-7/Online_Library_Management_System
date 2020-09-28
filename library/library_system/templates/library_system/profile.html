@@ -3,71 +3,17 @@
   <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
   {% extends "library_system/base.html" %}
   {% block content %}
-  {% if request.user.role == "manager" %}
+  {% if request.user.role == "regular" %}
     <div class="">
-      <h1>WELCOME Manager {{ request.user.first_name }} {{request.user.last_name}}!</h1>
-    </div>
-  {% else %}
-
-    <div class="">
-      <h1>WELCOME {{ request.user.first_name }} {{request.user.last_name}}!</h1>
-      <h2>The Xavier’s School for Gifted Youngsters Library System allows teachers and students to borrow & return books and track your status! </h2>
+      <h2>PROFILE PAGE of {{ request.user.first_name }} {{request.user.last_name}}!</h2>
     </div>
   {% endif %}
-    {% for book in books %}
-      <main role="main" class="container">
-        <div class="jumbotron">
-          <h2>Book Title: <a href="{% url 'book-detail' book.id %}">{{ book.title }}</a></h2>
-          <p class="lead">By {{ book.author.first_name }} {{ book.author.last_name}}</p>
-        </div>
-      </main>
-    {% endfor %}
-
-    {% for author in authors %}
-      <main role="main" class="container">
-        <div class="jumbotron">
-          <h2>Author's Name:</h2>
-            <h3> <a href="{% url 'author-detail' author.id %}">{{ author.first_name }} {{ author.last_name }}</a></h3>
-        </div>
-      </main>
-    {% endfor %}
-
-  {% for genre in genres %}
-    <main role="main" class="container">
-      <div class="jumbotron">
-        <h2>Genre Name: </h2>
-        <h3><a href="{% url 'genre-detail' genre.id %}">{{ genre.name }}</a></h3>
-      </div>
-    </main>
-  {% endfor %}
 
   {% for review in object_list  %}
-    <main role="main" class="container">
+    <main role="main" style="word-wrap: break-word;" class="container break-text">
       <div class="jumbotron">
         <h5>Book Title: {{ review.book.title }}</h5>
-        <h6>Review Writer: {{review.review_writer.username}}</h6>
         <p>Review: {{review.review_text }}</p>
-
-      </div>
-    </main>
-  {% endfor %}
-
-  {% for bookinstance in bookinstances %}
-    <main role="main" class="container">
-      <div class="jumbotron">
-        <p class="lead"><a href="{% url 'bookinstance-detail' bookinstance.id %}">ID: {{ bookinstance.id }}</a></p>
-        <p>BOOK: {{ bookinstance.book.title }}</p>
-        <p>Imprint: {{bookinstance.imprint}} </p>
-        <p>Status: {{bookinstance.status}}</p>
-      </div>
-    </main>
-  {% endfor %}
-
-  {% for result in results %}
-    <main role="main" class="container">
-      <div class="jumbotron">
-        <h2>Book Name: </h2>
-        <h3><a href="">{{ result.title }}</a></h3>
       </div>
     </main>
   {% endfor %}
@@ -118,6 +64,31 @@
     </ul>
   </p>
 </div>
+
+{% elif request.user.role == "regular" %}
+
+<div class="content-section">
+  <h3>Actions:</h3>
+  <p class='text-muted'>You can perform the following actions:
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-secondary">REVIEWS</li>
+      <a href="/library_system/review/new" class="list-group-item  list-group-item-action">Add New Review</a>
+      <a><form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'profile-page' %}">
+        <input name="q" value="{{ user.email }}" type="hidden" class="form-control mr-sm-2" >
+        <button class="btn my-2 my-sm-0" style="background: none!important;"type="submit">View Your Reviews</button>
+      </form></a>
+      <!-- <a href="/library_system/profile/" name="q" value=""{{ request.user.email }}"" class="list-group-item  list-group-item-action"></a> -->
+
+      <li class="list-group-item list-group-item-secondary">BOOKS</li>
+      <a href="/library_system/profile/" class="list-group-item list-group-item-action">Books Borrowed</a>
+
+      <li class="list-group-item list-group-item-secondary">ACCOUNT SETTINGS</li>
+      <a href="/library_system/profile/" class="list-group-item list-group-item-action">Change Password</a>
+
+    </ul>
+  </p>
+</div>
+
 {% endif %}
 
 {% endblock %}

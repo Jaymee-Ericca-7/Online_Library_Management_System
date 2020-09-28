@@ -10,9 +10,12 @@ from .views import ( SearchListView,
     BookInstanceDetailView, BookInstanceListView,
     BookInstanceCreateView,BookInstanceUpdateView, BookInstanceDeleteView,
     ReviewDetailView, ReviewListView,FilteredReview,
-    ReviewCreateView, ReviewUpdateView, ReviewDeleteView)
+    ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
+    profile)
 
 urlpatterns = [
+    path('profile/', profile, name="profile-page" ),
+
     path('', BookListView.as_view(), name="libsys-home"),
     path('search/', SearchListView.as_view(), name="libsys-search"),
     path('book/<int:pk>/', BookDetailView.as_view(), name="book-detail"),

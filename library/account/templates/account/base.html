@@ -31,7 +31,10 @@
         <ul class="navbar-nav mr-auto">
           {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="#" >Profile </a>
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'profile-page' %}">
+              <input name="q" value="{{ user.email }}" type="hidden" class="form-control mr-sm-2" >
+              <button class="btn my-2 my-sm-0" type="submit">Profile</button>
+            </form>
           </li>
             <li class="nav-item ">
               <a class="nav-link" href="{% url 'logout' %}" >Log Out </a>

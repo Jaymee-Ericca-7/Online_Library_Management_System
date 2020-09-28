@@ -23,7 +23,6 @@ class SearchListView(ListView):
           result = None
       return result
 
-
 def home(request):
 
     books = Book.objects.all()
@@ -273,3 +272,18 @@ class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
         if self.request.user.role=="manager":
             return True
         return False
+
+def profile(request):
+    template = 'library_system/profile.html'
+    query = request.GET.get('q')
+    print(query)
+    if query:
+        print("query exists")
+        reviews = Review.objects.filter(review_writer__email__iexact=query)
+        print(reviews)
+    else:
+        reviews = Review.objects.all()
+    context = {
+        "object_list": reviews
+    }
+    return render(request, template, context)
