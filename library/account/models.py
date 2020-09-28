@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+#from django_cryptography.fields import encrypt
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, first_name, last_name, id_num, role, password=None):
