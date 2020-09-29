@@ -8,27 +8,34 @@
 
 Last Modified: 09/30/2020
 
-* User registration/account creation for all user types (teacher, student, and manager)
-    * Register as a Manager
-    * While registering, explain the data validation (password policy, field validation)
-    * Register as a teacher
-    * Register as a student
-* Browse/search for books (anonymous user and registered user)
-    * anonymous user search
-    * registered user search (need to login)
-    * while logging in, explain authentication methods implemented (temporarily locked out, cryptography, session management)
-    * search for book as a registered user
-* Borrow a book, leave a book review, view profile, manually change password (teacher and student)
-    * Borrow a book as a teacher
-    * Leave a book review as a teacher
-    * View the profile as a teacher
-    * Manually change password as a teacher
-    * Borrow a book as a student
-    * Leave a book review as a student
-    * View the profile as a student
-    * Manually change password as a student
-* Add a new book (manager)
-* Add a new book instance (manager)
-* Edit existing book information and book instance information (manager)
-* Delete book instance and book (manager)
-* Accessing logs (administrator)
+
+* Main Features
+  * User registration
+  * Profile Page for Regular (Student/Faculty) user
+  * Search/Browsing function - can search for any book based on what is typed in the search bar
+  * Anonymous user can search books and view books and book details only. 
+  * Only Admin can change user role
+  * Only Manager can perform CRUD functions for Book, Author, Genre, Book Instance
+  * Only Regular (student/faculty) user can Borrow a book, Return a book, Leave a book review
+
+* Authentication
+  * Username and password combination is required to authenticate students, teachers, managers, and administrators.
+  * User is temporarily locked out for too many failed login attempts.
+  * Cryptography is enabled for secure password storage
+  * Allows users to change their password
+
+* Authorization
+  * Users is not allowed to access pages that are not included in their role privileges
+
+* Session Management
+  * Manual Logout link/button
+  * Session logout is the user is idle for a predefined length of time (1 minute)
+
+* Data Validation
+  * Password policy during registration (i.e., minimum length, required characters, restrictions)
+  * Field validation for other attributes required during registration (i.e. email format)
+
+* Logging
+* Some system activities must be logged
+
+  
