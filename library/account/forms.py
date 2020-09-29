@@ -1,7 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from collections import OrderedDict
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
 from django.contrib.auth.forms import authenticate
-#from django_cryptography.fields import encrypt
 
 from account.models import Account
 
@@ -24,3 +24,7 @@ class AccountAuthenticationForm(forms.ModelForm):
             password = self.cleaned_data['password']
             if not authenticate(username = username, password = password):
                 raise forms.ValidationError("Invalid Login / Too many attempts")
+
+
+
+

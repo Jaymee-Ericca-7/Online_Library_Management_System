@@ -1,7 +1,8 @@
-{% extends "users/base.html" %}
+{% extends "account/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
   <h2>Profile of {{ user.username }}</h2>
+  <h1><a href="{% url 'change_password' %}">{}</a></h1>
   <div class="content-section">
     {% for author in authors %}
       <main role="main" class="container">

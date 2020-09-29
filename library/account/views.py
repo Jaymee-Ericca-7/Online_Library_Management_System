@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from account.forms import RegistrationForm, AccountAuthenticationForm
-import hashlib, binascii
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
 
 def registration_view(request):
     if request.method == 'POST':
@@ -16,6 +20,25 @@ def registration_view(request):
     else:
         form = RegistrationForm()
     return render(request, 'account/register.html', {'form': form})
+
+@login_required
+def profile(request):
+    return render(request, 'account/profile.html')
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            return redirect('change_password')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'account/change_password.html', {
+        'form': form
+    })
 
 def login_view(request):
     user = request.user
@@ -42,4 +65,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return render(request, 'account/logout.html')
+
+
+
 # Create your views here.
