@@ -1,0 +1,41 @@
+
+
+  <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
+  {% extends "library_system/base.html" %}
+  {% block content %}
+      <main role="main" class="container">
+        <div class="jumbotron">
+          <h1>{{ object.title }}</h1>
+          <p class="lead">By {{ object.author.first_name }} {{ object.author.last_name}}</p>
+          <p>Published by {{ object.publisher }} on year {{ object.year_of_pub}}</p>
+          <p>ISBN: {{object.isbn}}</p>
+          <p>Genre: {% for tag in object.genre.all %} {{tag.name}}, {% endfor %}</p>
+          <!-- <p>Status: {{object.status}}</p> -->
+          {% if  request.user.role == "manager" %}
+          <p>
+            <a href="{% url 'book-delete' object.id %}" class="btn btn-primary">Delete</a>
+            <a href="{% url 'book-update' object.id %}" class="btn btn-primary">Edit</a>
+          </p>
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'bookinstance-list' %}">
+              <input name="q" value="{{ object.title }}" type="hidden" class="form-control mr-sm-2" >
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Book Copies</button>
+            </form>
+
+          {% elif request.user.role == "regular" %}
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'borrow_book' %}">
+              <input name="q" value="{{ object.title }}" type="hidden" class="form-control mr-sm-2" >
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Borrow Book</button>
+            </form>
+
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'filtered-review-list' %}">
+              <input name="q" value="{{ object.id }}" type="hidden" class="form-control mr-sm-2" >
+              <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Checkout the Reviews!</button>
+            </form>
+          {% endif %}
+        </div>
+        <button onclick="goBack()" class="btn btn-outline-secondary">Go Back</button>
+        <a class="btn btn-outline-secondary" href="{% url 'libsys-home' %}">Go To Books List</a>
+
+      </main>
+
+  {% endblock content %}

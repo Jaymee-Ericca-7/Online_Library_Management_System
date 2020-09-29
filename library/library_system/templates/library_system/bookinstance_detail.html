@@ -1,0 +1,27 @@
+
+
+  <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
+  {% extends "library_system/base.html" %}
+  {% block content %}
+  {% if  request.user.role == "manager" %}
+      <main role="main" class="container">
+        <div class="jumbotron">
+          <p class="lead">Book ID: {{ object.id }}</p>
+          <p>Book Title: {{ object.book.title }}</p>
+          <p>Book Version: {{object.version}} </p>
+          <p>Status: {{object.status}}</p>
+          {% if object.status == "Reserved" %}
+            <p> Borrowed by: {{ object.borrower.first_name }} {{ object.borrower.last_name }}</p>
+            <p> Due for Return: {{ object.due_back }}</p>
+          {% endif %}
+          <p>
+            <a href="{% url 'bookinstance-delete' object.id %}" class="btn btn-primary">Delete</a>
+            <a href="{% url 'bookinstance-update' object.id %}" class="btn btn-primary">Edit</a>
+          </p>
+        </div>
+        <button onclick="goBack()" class="btn btn-outline-secondary">Go Back</button>
+        <a href="{% url 'libsys-home' %}"class="btn btn-outline-secondary"> Go to Home Page</a>
+      </main>
+      {% endif %}
+
+  {% endblock content %}

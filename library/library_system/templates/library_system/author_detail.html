@@ -1,0 +1,26 @@
+
+
+  <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
+  {% extends "library_system/base.html" %}
+  {% block content %}
+  {% if  request.user.role == "manager" %}
+
+      <main role="main" class="container">
+        <div class="jumbotron">
+          <h1>Author: {{ object.first_name }} {{ object.last_name}}</h1>
+          <p class="lead">Date of Birth: {{ object.date_of_birth }}</p>
+          <p class="lead">Date of Death: {{ object.date_of_death }}</p>
+
+          <p>
+            <a href="{% url 'author-delete' object.id %}" class="btn btn-primary">Delete</a>
+            <a href="{% url 'author-update' object.id %}" class="btn btn-primary">Edit</a>
+          </p>
+
+        </div>
+        <button onclick="goBack()" class="btn btn-outline-secondary">Go Back</button>
+        <a class="btn btn-outline-secondary" href="{% url 'author-list' %}">Go To Authors List</a>
+
+      </main>
+      {% endif %}
+
+  {% endblock content %}

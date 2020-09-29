@@ -1,0 +1,86 @@
+
+
+  <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
+  {% extends "library_system/base.html" %}
+  {% block profile_body %}
+
+    <h1>{{ message }}</h1>
+    <div class="">
+
+    </div>
+
+    <div class="">
+      <h2>PROFILE PAGE of {{ request.user.first_name }} {{request.user.last_name}}!</h2>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h3>Reviews on Books:</h3> <h4><a href="/library_system/review/new" class="btn">Add New Review</a></h4>
+
+        </div>
+        <div class="col">
+          <h3>Books Borrowed: </h3>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          {% for review in object_list  %}
+            <div role="main" style="word-wrap: break-word;" class="row break-text">
+              <div class="jumbotron" style="width: 80%;">
+                <h5>Book Title: {{ review.book.title }} </h5>
+                <a href="{% url 'review-detail' review.id %}" class="btn btn-primary">Check Your Review! </a>
+                <!-- <p>Review: {{review.review_text }}</p> -->
+              </div>
+            </div>
+          {% endfor %}
+
+        </div>
+
+        <div class="col">
+
+          {% for bookinstance in booksborrowed %}
+            <div role="main" class="row">
+              <div class="jumbotron" style="width: 80%;">
+                <p>Book Title: {{ bookinstance.book.title }}</p>
+                <p>Book Version: {{bookinstance.version}} </p>
+                {% if bookinstance.status == "Reserved" %}
+                  <p> Due for Return: {{ bookinstance.due_back }}</p>
+                {% endif %}
+                 <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'return_book' %}">
+                   <input name="r" value="{{ bookinstance.book.title }}" type="hidden" class="form-control mr-sm-2" >
+                   <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Return Book</button>
+                 </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif  %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'-3' %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif  %}
+
+    {% endif %}
+
+
+{% endblock profile_body %}

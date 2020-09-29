@@ -1,0 +1,18 @@
+
+
+  <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
+  {% extends "library_system/base.html" %}
+  {% block content %}
+
+      <main role="main" class="container">
+        <div class="jumbotron">
+          <h1>Book Title: {{ object.book.title }} </h1>
+          <p class="lead">Review: {{ object.review_text }}</p>
+
+        </div>
+        <button onclick="goBack()" class="btn btn-outline-secondary">Go Back</button>
+
+          <!-- <a class="btn btn-outline-secondary" href="{% url 'review-list' %}">Back To Reviews List</a> -->
+      </main>
+
+  {% endblock content %}

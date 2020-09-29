@@ -1,0 +1,21 @@
+{% extends "library_system/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="content-section containter">
+    <form method="POST" class="form-group">
+      {% csrf_token %}
+      <fieldset class="form-group">
+          <legend class="border-bottom mb-4">Add  Review</legend>
+          {{ form|crispy }}
+      </fieldset>
+      <div class="form-group">
+        <button type="submit" class="btn btn-outline-info">Publish Review</button>
+        {% if object.id != null %}
+        <a class="btn btn-outline-secondary" href="{% url 'author-detail' object.id %}">Cancel</a>
+        {% else %}
+        <a class="btn btn-outline-secondary" href="{% url 'author-list' %}">Cancel</a>
+        {% endif %}
+            </div>
+    </form>
+  </div>
+{%endblock content %}
