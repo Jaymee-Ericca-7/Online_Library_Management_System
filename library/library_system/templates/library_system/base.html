@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
   <head>
     <!-- Required meta tags -->
    <meta charset="utf-8">
@@ -34,13 +38,15 @@
 
         <ul class="navbar-nav mr-auto">
           {% if user.is_authenticated %}
-          <li class="nav-item">
-            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'profile-page' %}">
-              <input name="q" value="{{ user.email }}" type="hidden" class="form-control mr-sm-2" >
-              <button class="btn my-2 my-sm-0" type="submit">Profile</button>
-            </form>
-            <!-- <a class="nav-link" href="{% url 'profile-page' %}" > </a> -->
-          </li>
+            {% if user.role == "regular" %}
+              <li class="nav-item">
+                <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'profile-page' %}">
+                  <input name="q" value="{{ user.email }}" type="hidden" class="form-control mr-sm-2" >
+                  <button class="btn my-2 my-sm-0" type="submit">Profile</button>
+                </form>
+                <!-- <a class="nav-link" href="{% url 'profile-page' %}" > </a> -->
+              </li>
+            {% endif %}
             <li class="nav-item ">
               <a class="nav-link" href="{% url 'logout' %}" >Log Out </a>
             </li>
@@ -61,6 +67,7 @@
   </head>
   <body>
 
+    {% if request.path != "/library_system/profile/"  %}
 
     <main role="main" class="container">
       <div class="row">
@@ -75,10 +82,28 @@
           {% block content %}{% endblock %}
         </div>
         <div class="col-md-4">
-          {% block body %}{% endblock %}
+            {% block body %}{% endblock %}
         </div>
       </div>
     </main>
+
+    {% else %}
+
+    <main role="main" class="container">
+        <div class="">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+          {% block profile_body %}{% endblock profile_body %}
+        </div>
+
+    </main>
+    {% endif %}
+
 
 
    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

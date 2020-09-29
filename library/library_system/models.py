@@ -45,25 +45,17 @@ import uuid
 
 class BookInstance(models.Model):
     """Model representing a specific copy of a book"""
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID')
-    book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
-    imprint = models.CharField(max_length=200)
-    due_back = models.DateField(null=True, blank=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_update = models.DateTimeField(auto_now=True)
-
     LOAN_STATUS = (
-        ('a', 'Available'),
-        ('r', 'Reserved'),
+        ('Available', 'Available'),
+        ('Reserved', 'Reserved'),
     )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID', editable=False)
+    status = models.CharField(max_length=20, choices=LOAN_STATUS, blank=True, default='Available', help_text='Book Availability')
+    book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
+    version = models.CharField(max_length=200, help_text='description or version of book copy (eq. "5th edition" )', null=True)
+    due_back = models.DateField(null=True, blank=True)
+    borrower = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
 
-    status = models.CharField(
-        max_length=1,
-        choices=LOAN_STATUS,
-        blank=True,
-        default='m',
-        help_text='Book Availability',
-    )
     class Meta:
         ordering = ['due_back']
 

@@ -10,7 +10,9 @@
           <p class="lead">Review: {{ object.review_text }}</p>
 
         </div>
-          <a class="btn btn-outline-secondary" href="{% url 'review-list' %}">Back To Reviews List</a>
+        <button onclick="goBack()" class="btn btn-outline-secondary">Go Back</button>
+
+          <!-- <a class="btn btn-outline-secondary" href="{% url 'review-list' %}">Back To Reviews List</a> -->
       </main>
 
   {% endblock content %}

@@ -5,7 +5,7 @@
   {% block content %}
   {% if request.user.role == "manager" %}
     <div class="">
-      <h1>WELCOME Manager {{ request.user.first_name }} {{request.user.last_name}}!</h1>
+      <h1> Manager {{ request.user.first_name }} {{request.user.last_name}}!</h1>
     </div>
   {% else %}
 
@@ -55,10 +55,14 @@
   {% for bookinstance in bookinstances %}
     <main role="main" class="container">
       <div class="jumbotron">
-        <p class="lead"><a href="{% url 'bookinstance-detail' bookinstance.id %}">ID: {{ bookinstance.id }}</a></p>
-        <p>BOOK: {{ bookinstance.book.title }}</p>
-        <p>Imprint: {{bookinstance.imprint}} </p>
+        <p class="lead"><a href="{% url 'bookinstance-detail' bookinstance.id %}">Book ID: {{ bookinstance.id }}</a></p>
+        <p>Book Title: {{ bookinstance.book.title }}</p>
+        <p>Book Version: {{bookinstance.version}} </p>
         <p>Status: {{bookinstance.status}}</p>
+        {% if bookinstance.status == "Reserved" %}
+          <p> Borrowed by: {{ bookinstance.borrower.first_name }} {{ bookinstance.borrower.last_name }}</p>
+          <p> Due for Return: {{ bookinstance.due_back }}</p>
+        {% endif %}
       </div>
     </main>
   {% endfor %}
@@ -93,6 +97,7 @@
     {% endif  %}
 
   {% endif %}
+  
 {% endblock content %}
 
 {% block body %}
@@ -106,6 +111,7 @@
       <li class="list-group-item list-group-item-secondary">BOOKS</li>
       <a href="/library_system/book/new/" class="list-group-item list-group-item-action">Add New Book</a>
       <a href="{% url 'libsys-home' %}" class="list-group-item  list-group-item-action">View Books</a>
+      <a href="{% url 'bookinstance-create' %}" class="list-group-item list-group-item-action">Add Book Copy</a>
 
       <li class="list-group-item list-group-item-secondary">AUTHOR</li>
       <a href="/library_system/author/new" class="list-group-item  list-group-item-action">Add New Author</a>

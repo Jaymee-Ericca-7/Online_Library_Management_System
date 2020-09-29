@@ -52,7 +52,8 @@ def sig_user_logged_in(sender, user, request, **kwargs):
     request.session['username'] = user.username
     isLoggedIn = request.session.get('isLoggedIn',False)
     isAdmin = request.session.get('isAdmin',False)
-    print(request.session['isLoggedIn'])
-    print(request.session['username'])
-    print(request.session['role'])
+    
     request.session.set_expiry(60)
+    if request.session['isLoggedIn'] == False:
+        logout(request)
+        return render(request, 'account/logout.html')

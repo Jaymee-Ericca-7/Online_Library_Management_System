@@ -2,93 +2,82 @@
 
   <!-- <h1>LIBRARY SYSTEM HOME!</h1> -->
   {% extends "library_system/base.html" %}
-  {% block content %}
-  {% if request.user.role == "regular" %}
+  {% block profile_body %}
+
+
+
+
     <div class="">
       <h2>PROFILE PAGE of {{ request.user.first_name }} {{request.user.last_name}}!</h2>
     </div>
-  {% endif %}
 
-  {% for review in object_list  %}
-    <main role="main" style="word-wrap: break-word;" class="container break-text">
-      <div class="jumbotron">
-        <h5>Book Title: {{ review.book.title }}</h5>
-        <p>Review: {{review.review_text }}</p>
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <h3>Reviews on Books:</h3> <h4><a href="/library_system/review/new" class="btn">Add New Review</a></h4>
+
+        </div>
+        <div class="col">
+          <h3>Books Borrowed: </h3>
+        </div>
       </div>
-    </main>
-  {% endfor %}
 
-  {% if is_paginated %}
+      <div class="row">
 
-    {% if page_obj.has_previous %}
-      <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-      <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-    {% endif  %}
+        <div class="col">
+          {% for review in object_list  %}
+            <div role="main" style="word-wrap: break-word;" class="row break-text">
+              <div class="jumbotron" style="width: 80%;">
+                <h5>Book Title: {{ review.book.title }} </h5>
+                <a href="{% url 'review-detail' review.id %}" class="btn btn-primary">Check Your Review! </a>
+                <!-- <p>Review: {{review.review_text }}</p> -->
+              </div>
+            </div>
+          {% endfor %}
 
-    {% for num in page_obj.paginator.page_range %}
-      {% if page_obj.number == num %}
-      <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-      {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'-3' %}
-      <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-      {% endif %}
-    {% endfor %}
+        </div>
 
-    {% if page_obj.has_next %}
-      <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
-      <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
-    {% endif  %}
+        <div class="col">
 
-  {% endif %}
-{% endblock content %}
+          {% for bookinstance in booksborrowed %}
+            <div role="main" class="row">
+              <div class="jumbotron" style="width: 80%;">
+                <p>Book Title: {{ bookinstance.book.title }}</p>
+                <p>Book Version: {{bookinstance.version}} </p>
+                {% if bookinstance.status == "Reserved" %}
+                  <p> Due for Return: {{ bookinstance.due_back }}</p>
+                {% endif %}
+                 <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'profile-page' %}">
+                   <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Return Book</button>
+                 </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div> 
+    </div>
+    {% if is_paginated %}
 
-{% block body %}
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif  %}
 
-{% if request.user.role == "manager" %}
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'-3' %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
 
-<div class="content-section">
-  <h3>Actions:</h3>
-  <p class='text-muted'>You can perform the following actions:
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-secondary">BOOKS</li>
-      <a href="/library_system/book/new/" class="list-group-item list-group-item-action">Add New Book</a>
-      <a href="{% url 'libsys-home' %}" class="list-group-item  list-group-item-action">View Books</a>
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif  %}
 
-      <li class="list-group-item list-group-item-secondary">AUTHOR</li>
-      <a href="/library_system/author/new" class="list-group-item  list-group-item-action">Add New Author</a>
-      <a href="/library_system/authors/" class="list-group-item  list-group-item-action">View Authors</a>
+    {% endif %}
 
-      <li class="list-group-item list-group-item-secondary">GENRE</li>
-      <a href="{% url 'genre-create' %}" class="list-group-item list-group-item-action">Add New Genre</a>
-      <a href="{% url 'genre-list' %}" class="list-group-item  list-group-item-action">View Genres</a>
 
-    </ul>
-  </p>
-</div>
-
-{% elif request.user.role == "regular" %}
-
-<div class="content-section">
-  <h3>Actions:</h3>
-  <p class='text-muted'>You can perform the following actions:
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-secondary">REVIEWS</li>
-      <a href="/library_system/review/new" class="list-group-item  list-group-item-action">Add New Review</a>
-      <a><form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'profile-page' %}">
-        <input name="q" value="{{ user.email }}" type="hidden" class="form-control mr-sm-2" >
-        <button class="btn my-2 my-sm-0" style="background: none!important;"type="submit">View Your Reviews</button>
-      </form></a>
-      <!-- <a href="/library_system/profile/" name="q" value=""{{ request.user.email }}"" class="list-group-item  list-group-item-action"></a> -->
-
-      <li class="list-group-item list-group-item-secondary">BOOKS</li>
-      <a href="/library_system/profile/" class="list-group-item list-group-item-action">Books Borrowed</a>
-
-      <li class="list-group-item list-group-item-secondary">ACCOUNT SETTINGS</li>
-      <a href="/library_system/profile/" class="list-group-item list-group-item-action">Change Password</a>
-
-    </ul>
-  </p>
-</div>
-
-{% endif %}
-
-{% endblock %}
+{% endblock profile_body %}

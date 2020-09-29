@@ -26,7 +26,10 @@ class SearchListView(ListView):
 def home(request):
 
     books = Book.objects.all()
-    args = {'books': books}
+    paginate_by = 3
+
+    args = {'books': books,
+            'paginate_by': paginate_by}
     return render(request, 'library_system/home.html', args)
 
 class BookListView(ListView):
@@ -70,6 +73,10 @@ class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+
+# ----------------------------------------------------------------------------------------
+
+
 class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Author
     fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
@@ -80,7 +87,7 @@ class AuthorCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return True
         return False
 
-class AuthorListView(ListView):
+class AuthorListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     authors = Author.objects.all()
     model = Author
     template_name = 'library_system/home.html'
@@ -94,8 +101,13 @@ class AuthorListView(ListView):
             return True
         return False
 
-class AuthorDetailView(DetailView):
+class AuthorDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Author
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class AuthorUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Author
@@ -116,6 +128,8 @@ class AuthorDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+# ----------------------------------------------------------------------------------------
+
 
 class GenreCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Genre
@@ -127,7 +141,7 @@ class GenreCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
             return True
         return False
 
-class GenreListView(ListView):
+class GenreListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     genres = Genre.objects.all()
     model = Genre
     template_name = 'library_system/home.html'
@@ -135,9 +149,19 @@ class GenreListView(ListView):
     ordering = ['-date_created']
     paginate_by = 3
 
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
-class GenreDetailView(DetailView):
+class GenreDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Genre
+    def test_func(self):
+        #get the post we're updating
+        if self.request.user.role=="manager":
+            return True
+        return False
 
 class GenreUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Genre
@@ -220,10 +244,9 @@ class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 # ---------------------------------------------------------------------------------
 
-
 class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = BookInstance
-    fields = ['id', 'book', 'imprint', 'due_back', 'status']
+    fields = ['book', 'borrower', 'version', 'due_back', 'status']
 
     def test_func(self):
         #get the post we're updating
@@ -231,18 +254,43 @@ class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView
             return True
         return False
 
-class BookInstanceListView(ListView):
-    bookinstances = BookInstance.objects.all()
-    model = BookInstance
-    template_name = 'library_system/home.html'
-    context_object_name = 'bookinstances'
-    ordering = ['-date_created']
+def BookInstanceListView(request):
+    template = 'library_system/home.html'
+    query = request.GET.get('q')
+    query2 = request.GET.get('u')
+    print(query)
+    print(query2)
     paginate_by = 3
-    def test_func(self):
-        #get the post we're updating
-        if self.request.user.role=="manager":
-            return True
-        return False
+    if query:
+        print("query exists")
+        book_copies = BookInstance.objects.filter(book__title__iexact=query)
+        print(book_copies)
+        context = {
+            "bookinstances": book_copies,
+            "paginate_by": paginate_by
+        }
+    elif query2:
+        print("query exists 2 ")
+        books_borrowed = BookInstance.objects.filter(borrower__email=query2)
+        print(books_borrowed)
+        template = 'library_system/profile.html'
+        context = {
+            "booksborrowed": books_borrowed,
+            "paginate_by": paginate_by
+        }
+    else:
+        book_copies = BookInstance.objects.all()
+        books_borrowed = []
+        context = {
+            "booksborrowed": books_borrowed,
+            "bookinstances": book_copies,
+            "paginate_by": paginate_by
+        }
+    paginate_by = 3
+    return render(request, template, context)
+    # bookinstances = BookInstance.objects.all()
+    # model = BookInstance
+
 
 class BookInstanceDetailView(DetailView):
     model = BookInstance
@@ -254,7 +302,7 @@ class BookInstanceDetailView(DetailView):
 
 class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BookInstance
-    fields = ['imprint', 'due_back', 'status']
+    fields = ['version', 'due_back', 'status', 'borrower']
 
     def test_func(self):
         #get the post we're updating
@@ -265,7 +313,8 @@ class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
 
 class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = BookInstance
-    success_url = '/bookinstance'
+    success_url = '/library_system/bookinstance'
+
     def test_func(self):
         #get the post we're updating
         book = self.get_object()
@@ -277,13 +326,18 @@ def profile(request):
     template = 'library_system/profile.html'
     query = request.GET.get('q')
     print(query)
+    paginate_by = 3
     if query:
         print("query exists")
         reviews = Review.objects.filter(review_writer__email__iexact=query)
+        books_borrowed = BookInstance.objects.filter(borrower__email=query)
         print(reviews)
     else:
-        reviews = Review.objects.all()
+        reviews = []
+        books_borrowed = []
     context = {
-        "object_list": reviews
+        "object_list": reviews,
+        "booksborrowed": books_borrowed,
+        "paginate_by": paginate_by
     }
     return render(request, template, context)
