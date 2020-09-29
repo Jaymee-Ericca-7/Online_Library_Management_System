@@ -1,5 +1,13 @@
 # Online_Library_Management_System
 
+* Programmers: 
+Villacruz, Jaymee
+Puno, Enoch
+Silverio, Jan
+Fernandez, Lourdes
+
+Last Modified: 09/30/2020
+
 * User registration/account creation for all user types (teacher, student, and manager)
     * Register as a Manager
     * While registering, explain the data validation (password policy, field validation)
