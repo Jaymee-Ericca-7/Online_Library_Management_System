@@ -38,4 +38,15 @@ Last Modified: 09/30/2020
 * Logging
 * Some system activities must be logged
 
+
+
+Notes: 
+To run the application, make sure to do the following:
+* python manage.py makemigrations
+* python manage.py migrate
+* pip install django-brutebuster2
+* python manage.py migrate --run-syncdb
+* python manage.py createsuperuser <- for admin access
+* python manage.py runserver
+
   
