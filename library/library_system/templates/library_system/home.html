@@ -9,6 +9,11 @@
     </div>
   {% else %}
 
+
+    <h1 style="color: orange;">{{ message }}</h1>
+    <div class="">
+
+    </div>
     <div class="">
       <h1>WELCOME {{ request.user.first_name }} {{request.user.last_name}}!</h1>
       <h2>The Xavier’s School for Gifted Youngsters Library System allows teachers and students to borrow & return books and track your status! </h2>
@@ -97,7 +102,7 @@
     {% endif  %}
 
   {% endif %}
-  
+
 {% endblock content %}
 
 {% block body %}

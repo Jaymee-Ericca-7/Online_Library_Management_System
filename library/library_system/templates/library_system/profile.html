@@ -4,8 +4,10 @@
   {% extends "library_system/base.html" %}
   {% block profile_body %}
 
+    <h1>{{ message }}</h1>
+    <div class="">
 
-
+    </div>
 
     <div class="">
       <h2>PROFILE PAGE of {{ request.user.first_name }} {{request.user.last_name}}!</h2>
@@ -48,14 +50,15 @@
                 {% if bookinstance.status == "Reserved" %}
                   <p> Due for Return: {{ bookinstance.due_back }}</p>
                 {% endif %}
-                 <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'profile-page' %}">
+                 <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'return_book' %}">
+                   <input name="r" value="{{ bookinstance.book.title }}" type="hidden" class="form-control mr-sm-2" >
                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Return Book</button>
                  </form>
               </div>
             </div>
           {% endfor %}
         </div>
-      </div> 
+      </div>
     </div>
     {% if is_paginated %}
 

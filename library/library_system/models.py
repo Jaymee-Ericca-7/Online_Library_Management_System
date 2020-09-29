@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from account.models import Account
+from datetime import datetime, timedelta
+
 # Create your models here.
 
 class Genre(models.Model):
@@ -43,6 +45,9 @@ class Book(models.Model):
 
 import uuid
 
+def get_deadline():
+    return datetime.today() + timedelta(days=7)
+
 class BookInstance(models.Model):
     """Model representing a specific copy of a book"""
     LOAN_STATUS = (
@@ -53,8 +58,8 @@ class BookInstance(models.Model):
     status = models.CharField(max_length=20, choices=LOAN_STATUS, blank=True, default='Available', help_text='Book Availability')
     book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     version = models.CharField(max_length=200, help_text='description or version of book copy (eq. "5th edition" )', null=True)
-    due_back = models.DateField(null=True, blank=True)
-    borrower = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
+    due_back = models.DateField(null=True, default=get_deadline)
+    borrower = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering = ['due_back']

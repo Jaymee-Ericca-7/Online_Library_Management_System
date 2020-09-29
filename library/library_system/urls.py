@@ -11,7 +11,7 @@ from .views import ( SearchListView,
     BookInstanceCreateView,BookInstanceUpdateView, BookInstanceDeleteView,
     ReviewDetailView, ReviewListView,FilteredReview,
     ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
-    profile)
+    profile, borrow_book, return_book)
 
 urlpatterns = [
     path('profile/', profile, name="profile-page" ),
@@ -22,6 +22,9 @@ urlpatterns = [
     path('book/new/', BookCreateView.as_view(), name="book-create"),
     path('book/<int:pk>/update/', BookUpdateView.as_view(), name="book-update"),
     path('book/<int:pk>/delete/', BookDeleteView.as_view(), name="book-delete"),
+
+    path('book/borrow_book/', borrow_book, name="borrow_book"),
+    path('book/return_book/', return_book, name="return_book"),
 
     path('author/new/', AuthorCreateView.as_view(), name="author-create"),
     path('author/<int:pk>/', AuthorDetailView.as_view(), name="author-detail"),
@@ -46,5 +49,6 @@ urlpatterns = [
     path('bookinstance/<pk>/', BookInstanceDetailView.as_view(), name="bookinstance-detail"),
     path('bookinstance/<pk>/update/', BookInstanceUpdateView.as_view(), name="bookinstance-update"),
     path('bookinstance/<pk>/delete/', BookInstanceDeleteView.as_view(), name="bookinstance-delete"),
-    path('bookinstance/',BookInstanceListView, name="bookinstance-list" )
+    path('bookinstance/',BookInstanceListView, name="bookinstance-list"),
+
 ]

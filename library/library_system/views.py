@@ -246,7 +246,7 @@ class ReviewDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class BookInstanceCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = BookInstance
-    fields = ['book', 'borrower', 'version', 'due_back', 'status']
+    fields = ['book', 'version', 'status']
 
     def test_func(self):
         #get the post we're updating
@@ -302,7 +302,7 @@ class BookInstanceDetailView(DetailView):
 
 class BookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = BookInstance
-    fields = ['version', 'due_back', 'status', 'borrower']
+    fields = ['version', 'status', 'borrower']
 
     def test_func(self):
         #get the post we're updating
@@ -325,13 +325,10 @@ class BookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView
 def profile(request):
     template = 'library_system/profile.html'
     query = request.GET.get('q')
-    print(query)
     paginate_by = 3
     if query:
-        print("query exists")
         reviews = Review.objects.filter(review_writer__email__iexact=query)
         books_borrowed = BookInstance.objects.filter(borrower__email=query)
-        print(reviews)
     else:
         reviews = []
         books_borrowed = []
@@ -340,4 +337,43 @@ def profile(request):
         "booksborrowed": books_borrowed,
         "paginate_by": paginate_by
     }
+    return render(request, template, context)
+
+def borrow_book(request):
+    print("IN BORROW BOOK METHOD")
+
+    query = request.GET.get('q')
+    print(query)
+    specific_book_copy = BookInstance.objects.filter(book__title__iexact=query, status="Available")
+    if specific_book_copy:
+        specific_book_copy.update(status="Reserved", borrower=request.user.id)
+        print("updated!")
+        context = {
+            'message': "Borrowed Book Successfully!"
+        }
+        return render(request, 'library_system/home.html', context)
+    else:
+        context = {
+            'message': "Book is already reserved!"
+        }
+        return render(request, "library_system/home.html", context)
+
+
+
+def return_book(request):
+    print("RETURN BOOK METHOD")
+    template = "library_system/home.html"
+    query = request.GET.get('r')
+    print(query)
+    specific_book_copy = BookInstance.objects.filter(book__title__iexact=query, status="Reserved", borrower=request.user.id)
+    if specific_book_copy:
+        print("BOOK INSTANCE QUERY EXISTS!")
+        specific_book_copy.update(status="Available", borrower=None, due_back=None)
+        print("updated!")
+        context = {
+            'message': "Returned Book Successfully"
+        }
+    else:
+        print("BOOK INSTANCE QUERY DOES NOT EXIST!")
+
     return render(request, template, context)

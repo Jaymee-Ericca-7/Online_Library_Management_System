@@ -21,11 +21,15 @@
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Book Copies</button>
             </form>
 
-          {% else %}
+          {% elif request.user.role == "regular" %}
+            <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'borrow_book' %}">
+              <input name="q" value="{{ object.title }}" type="hidden" class="form-control mr-sm-2" >
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Borrow Book</button>
+            </form>
 
             <form class="form-inline mt-2 mt-md-0" method="GET" action="{% url 'filtered-review-list' %}">
               <input name="q" value="{{ object.id }}" type="hidden" class="form-control mr-sm-2" >
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Checkout the Reviews!</button>
+              <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Checkout the Reviews!</button>
             </form>
           {% endif %}
         </div>
