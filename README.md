@@ -1,10 +1,10 @@
 # Online_Library_Management_System
 
 * Programmers: 
-Villacruz, Jaymee
-Puno, Enoch
-Silverio, Jan
-Fernandez, Lourdes
+   * Villacruz, Jaymee
+   * Puno, Enoch
+   * Silverio, Jan
+   * Fernandez, Lourdes
 
 Last Modified: 09/30/2020
 
