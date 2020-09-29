@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'library_system.apps.LibrarySystemConfig',
     # 'users.apps.UsersConfig',
     'account',
+    'BruteBuster',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'BruteBuster.middleware.RequestMiddleware',
 ]
 
 ROOT_URLCONF = 'library.urls'
@@ -129,3 +131,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'libsys-home'
 LOGIN_URL = 'login'
+
+#BruteBuster Settings
+
+BB_MAX_FAILURES = 3
+BB_BLOCK_INTERVAL = 1

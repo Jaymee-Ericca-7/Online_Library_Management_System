@@ -3,6 +3,8 @@ from django.contrib.auth import login, authenticate, logout
 from account.forms import RegistrationForm, AccountAuthenticationForm
 from django.dispatch import receiver
 from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 
 def registration_view(request):
@@ -52,8 +54,26 @@ def sig_user_logged_in(sender, user, request, **kwargs):
     request.session['username'] = user.username
     isLoggedIn = request.session.get('isLoggedIn',False)
     isAdmin = request.session.get('isAdmin',False)
-    
-    request.session.set_expiry(60)
+
+    request.session.set_expiry(100)
     if request.session['isLoggedIn'] == False:
         logout(request)
         return render(request, 'account/logout.html')
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            print("password changed Successfully")
+            context = {
+                'message': "Password Changed Successfully!"
+            }
+            return render(request, 'library_system/home.html', context)
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'account/change_password.html', {
+        'form': form
+    })

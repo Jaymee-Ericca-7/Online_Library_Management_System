@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
-from account.views import(registration_view, logout_view, login_view)
+from account.views import(registration_view, logout_view, login_view, change_password)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', registration_view, name='register'),
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('library_system/', include('library_system.urls')),
+    path('password/', change_password, name='change_password')
+
 ]
 #
 # from django.views.generic import RedirectView
